@@ -16,7 +16,16 @@ MunitResult test_int_object() {
 
     // The value doesn't have the same address
     munit_assert_ptr(&o1->value.v_int, !=, &v);
+    free_object(o1);
     
+    // Can set object to value
+    int int_value = 2;
+    object_t *o = (object_t *) malloc(sizeof(object_t));
+    set_int_object(o, int_value);
+    munit_assert_int(o->kind, ==, INT);
+    munit_assert_int(o->value.v_int, ==, int_value);
+    free_object(o);
+
     return MUNIT_OK;
 }
 
@@ -32,6 +41,15 @@ MunitResult test_float_object() {
 
     // The value doesn't have the same address
     munit_assert_ptr(&o1->value.v_float, !=, &v);
+    free_object(o1);
+
+    // Can set object to value
+    float float_value = 2.0;
+    object_t *o = (object_t *) malloc(sizeof(object_t));
+    set_float_object(o, float_value);
+    munit_assert_int(o->kind, ==, FLOAT);
+    munit_assert_float(o->value.v_float, ==, float_value);
+    free_object(o);
     
     return MUNIT_OK;
 }
@@ -48,6 +66,15 @@ MunitResult test_str_object() {
 
     // The value doesn't have the same address
     munit_assert_ptr(&o1->value.v_str, !=, v);
+    free_object(o1);
+
+    // Can set object to value
+    char *str_value = "Hello World!";
+    object_t *o = (object_t *) malloc(sizeof(object_t));
+    set_str_object(o, str_value);
+    munit_assert_int(o->kind, ==, STR);
+    munit_assert_string_equal(str_value, o->value.v_str);
+    free_object(o);
     
     return MUNIT_OK;
 }
@@ -56,51 +83,56 @@ MunitResult test_object_compare() {
     // INT
     object_t *o1 = new_int_object(5);
     object_t *o2 = new_int_object(5);
-    munit_assert_int(objcmp(o1, o2), ==, 0);
-    free(o1);
-    free(o2);
+    munit_assert_int(object_compare(o1, o2), ==, 0);
+    free_object(o1);
+    free_object(o2);
 
     o1 = new_int_object(5);
     o2 = new_int_object(6);
-    munit_assert_int(objcmp(o1, o2), <, 0);
-    free(o1);
-    free(o2);
+    munit_assert_int(object_compare(o1, o2), <, 0);
+    free_object(o1);
+    free_object(o2);
 
     o1 = new_int_object(5);
     o2 = new_int_object(4);
-    munit_assert_int(objcmp(o1, o2), >, 0);
-    free(o1);
-    free(o2);
+    munit_assert_int(object_compare(o1, o2), >, 0);
+    free_object(o1);
+    free_object(o2);
     
     // FLOAT
     o1 = new_int_object(5.0);
     o2 = new_int_object(5.0);
-    munit_assert_int(objcmp(o1, o2), ==, 0);
-    free(o1);
-    free(o2);
+    munit_assert_int(object_compare(o1, o2), ==, 0);
+    free_object(o1);
+    free_object(o2);
 
     o1 = new_int_object(5.0);
     o2 = new_int_object(6.0);
-    munit_assert_int(objcmp(o1, o2), <, 0);
-    free(o1);
-    free(o2);
+    munit_assert_int(object_compare(o1, o2), <, 0);
+    free_object(o1);
+    free_object(o2);
 
     o1 = new_int_object(5.0);
     o2 = new_int_object(4.0);
-    munit_assert_int(objcmp(o1, o2), >, 0);
+    munit_assert_int(object_compare(o1, o2), >, 0);
+    free_object(o1);
+    free_object(o2);
     
     // STR
     o1 = new_str_object("Hello World!");
     o2 = new_str_object("Hello World!");
-    munit_assert_int(objcmp(o1, o2), ==, 0);
+    munit_assert_int(object_compare(o1, o2), ==, 0);
+    free_object(o1);
+    free_object(o2);
+
     
     o1 = new_str_object("Hello World!");
     o2 = new_str_object("hello world!");
-    munit_assert_int(objcmp(o1, o2), <, 0);
+    munit_assert_int(object_compare(o1, o2), <, 0);
     
     o1 = new_str_object("hello world!");
     o2 = new_str_object("Hello World!");
-    munit_assert_int(objcmp(o1, o2), >, 0);
+    munit_assert_int(object_compare(o1, o2), >, 0);
 
     return MUNIT_OK;
 }

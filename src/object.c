@@ -29,7 +29,7 @@ object_t *new_str_object(char *value) {
     size_t v_len = strlen(value) + 1;    
     o->value.v_str = (char *) malloc(v_len * sizeof(char));
     if(o->value.v_str == NULL) {
-        free(o);
+        free_object(o);
         return NULL;
     }
     
@@ -38,28 +38,70 @@ object_t *new_str_object(char *value) {
     return o;
 }
 
-int objcmp(object_t *o1, object_t *o2) {
+int object_compare(object_t *o1, object_t *o2) {
     switch(o1->kind) {
         case INT:
             if(o2->kind == INT) return o1->value.v_int - o2->value.v_int;
             else if(o2->kind == FLOAT) return (int) (o1->value.v_int - o2->value.v_float);
             else {
-                printf("\nInvalid operation at 'objcmp'\n");
+                printf("\nInvalid operation at 'object_compare'\n");
                 exit(-1);
             }
         case FLOAT:
             if(o2->kind == INT) return (int) (o1->value.v_float - o2->value.v_int);
             else if(o2->kind == FLOAT) return (int) (o1->value.v_float - o2->value.v_float);
             else {
-                printf("\nInvalid operation at 'objcmp'\n");
+                printf("\nInvalid operation at 'object_compare'\n");
                 exit(-1);
             }
         case STR:
             if(o2->kind == STR) return strcmp(o1->value.v_str, o2->value.v_str);
             else {
-                printf("\nInvalid operation at 'objcmp'\n");
+                printf("\nInvalid operation at 'object_compare'\n");
                 exit(-1);
             }
         default: return 0;
+    }
+}
+
+bool set_int_object(object_t *o, int value) {
+    if(o == NULL) return false;
+    o->kind = INT;
+    o->value.v_int = value;
+    return true;
+}
+
+bool set_float_object(object_t *o, float value) {
+    if(o == NULL) return false;
+    o->kind = FLOAT;
+    o->value.v_float = value;
+    return true;
+}
+
+bool set_str_object(object_t *o, char *value) {
+    if(o == NULL) return false;
+    
+    o->kind = STR;
+    size_t v_len = strlen(value) + 1;    
+    o->value.v_str = (char *) malloc(v_len * sizeof(char));
+    if(o->value.v_str == NULL) {
+        free_object(o);
+        return false;
+    }
+    strcpy(o->value.v_str, value);    
+    return true;
+}
+
+void free_object(object_t *o) {
+    switch(o->kind) {
+        case INT: free(o); break;
+        case FLOAT: free(o); break;
+        case STR:
+            free(o->value.v_str);
+            free(o);
+            break;
+        default:
+            printf("\n\tError: Unknown object kind at 'free_object'\n");
+            exit(-1);
     }
 }
