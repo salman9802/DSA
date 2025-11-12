@@ -4,6 +4,15 @@
 
 #include "object.h"
 
+void print_object(object_t *o) {
+    switch(o->kind) {
+        case INT: printf("%d", o->value.v_int); break;
+        case FLOAT: printf("%f", o->value.v_float); break;
+        case STR: printf("%s", o->value.v_str); break;
+        default: printf("%p", o); break;
+    }
+}
+
 object_t *new_int_object(int value) {
     object_t *o = (object_t *) malloc(sizeof(object_t));
     if(o == NULL) return NULL;
@@ -102,6 +111,34 @@ void free_object(object_t *o) {
             break;
         default:
             printf("\n\tError: Unknown object kind at 'free_object'\n");
+            exit(-1);
+    }
+}
+
+object_t *object_copy(object_t *o) {
+    object_t *new_object = (object_t *) malloc(sizeof(object_t));
+    switch(o->kind) {
+        case INT:
+            new_object->kind = INT;
+            new_object->value.v_int = o->value.v_int;
+            return new_object;
+        case FLOAT:
+            new_object->kind = FLOAT;
+            new_object->value.v_float = o->value.v_float;
+            return new_object;
+        case STR:
+            size_t v_len = strlen(o->value.v_str) + 1;
+            new_object->value.v_str = (char *) malloc(v_len * sizeof(char));
+            if(new_object->value.v_str == NULL) {
+                free_object(new_object);
+                return NULL;
+            }
+            
+            new_object->kind = STR;
+            strcpy(new_object->value.v_str, o->value.v_str);
+            return new_object;
+        default:
+            printf("\nInvalid operation at 'object_copy'\n");
             exit(-1);
     }
 }

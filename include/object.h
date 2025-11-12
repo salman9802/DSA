@@ -1,3 +1,5 @@
+#pragma once
+
 #include<stdbool.h>
 
 typedef enum ObjectKind {
@@ -17,6 +19,7 @@ typedef struct Object {
     object_value_t value;
 } object_t;
 
+void print_object(object_t *o);
 
 object_t *new_int_object(int value);
 object_t *new_float_object(float value);
@@ -26,3 +29,4 @@ bool set_int_object(object_t *o, int value);
 bool set_float_object(object_t *o, float value);
 bool set_str_object(object_t *o, char *value);
 void free_object(object_t *o);
+object_t *object_copy(object_t *o);

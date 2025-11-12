@@ -137,9 +137,8 @@ MunitResult test_object_compare() {
     return MUNIT_OK;
 }
 
-MunitTest *test_object_main() {
-    // int foo = 3, bar = 3;
-    // munit_assert_int(foo, ==, bar);
+
+MunitSuite *test_object_suite() {
     static MunitTest object_tests[] = {
     {
         "/test_int_object", /* name */
@@ -176,7 +175,15 @@ MunitTest *test_object_main() {
     /* Mark the end of the array with an entry where the test
     * function is NULL */
     { NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }    };
-    return object_tests;
+    
+    static MunitSuite suite = {
+        "/object", /* name */
+        object_tests, /* tests */
+        NULL, /* suites */
+        1, /* iterations */
+        MUNIT_SUITE_OPTION_NONE /* options */
+    };
+    return &suite;
 }
 
 
