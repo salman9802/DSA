@@ -261,7 +261,7 @@ MunitSuite *test_da_suite() {
     { NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }    };
 
     static MunitSuite suite = {
-        "/da", /* name */
+        "/dynamic_array", /* name */
         da_tests, /* tests */
         NULL, /* suites */
         1, /* iterations */

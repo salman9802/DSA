@@ -225,3 +225,26 @@ ll_node_t *ll_reverse(ll_node_t *head) {
     
     return prev;
 }
+
+ll_node_t *ll_remove_tail(ll_node_t **head) {
+    if(*head == NULL) return NULL;
+    ll_node_t *tail = *head, *new_tail = *head;
+    while(tail->next != NULL) {
+        new_tail = tail;
+        tail = tail->next;
+    }
+    new_tail->next = NULL;
+
+    if(tail == *head)
+        *head = NULL;
+
+    return tail;
+}
+
+ll_node_t *ll_remove_head(ll_node_t **head) {
+    if(*head == NULL) return NULL;
+    ll_node_t *node = NULL;
+    node = *head;
+    *head = (*head)->next;
+    return node;
+}

@@ -36,10 +36,9 @@ MunitResult test_ll_traverse() {
     ll_insert(&head, o2);
     ll_insert(&head, o3);
 
-    printf(" [");
-    ll_print(head);
-    printf("] ");
-    // fflush(stdout);
+    // printf(" [");
+    // ll_print(head);
+    // printf("] ");
 
     return MUNIT_OK;
 }
@@ -274,6 +273,47 @@ MunitResult test_ll_reverse() {
     return MUNIT_OK;
 }
 
+MunitResult test_ll_remove_tail() {
+    int i1 = 1, i2 = 2;
+    object_t *o1, *o2;
+    o1 = new_int_object(i1);
+    o2 = new_int_object(i2);
+    
+    ll_node_t *head = NULL;
+    ll_insert(&head, o1);
+    ll_insert(&head, o2);
+
+    munit_assert_ptr(ll_remove_tail(&head)->data, ==, o2);
+    munit_assert_ptr(head->data, ==, o1);
+    munit_assert_ptr(head->next, ==, NULL);
+
+    munit_assert_ptr(ll_remove_tail(&head)->data, ==, o1);
+    munit_assert_ptr(head, ==, NULL);
+
+    return MUNIT_OK;
+}
+
+MunitResult test_ll_remove_head() {
+    int i1 = 1, i2 = 2;
+    object_t *o1, *o2;
+    o1 = new_int_object(i1);
+    o2 = new_int_object(i2);
+    
+    ll_node_t *head = NULL;
+    ll_insert(&head, o1);
+    ll_insert(&head, o2);
+
+    munit_assert_ptr(ll_remove_head(&head)->data, ==, o1);
+    munit_assert_ptr(head->data, ==, o2);
+    munit_assert_ptr(head->next, ==, NULL);
+
+    munit_assert_ptr(ll_remove_head(&head)->data, ==, o2);
+    munit_assert_ptr(head, ==, NULL);
+
+    return MUNIT_OK;
+}
+
+
 MunitSuite *test_ll_suite() {
     // int foo = 3, bar = 3;
     // munit_assert_int(foo, ==, bar);
@@ -358,12 +398,28 @@ MunitSuite *test_ll_suite() {
         MUNIT_TEST_OPTION_NONE, /* options */
         NULL /* parameters */
     },
+    {
+        "/test_ll_remove_tail", /* name */
+        test_ll_remove_tail, /* test */
+        NULL, /* setup */
+        NULL, /* tear_down */
+        MUNIT_TEST_OPTION_NONE, /* options */
+        NULL /* parameters */
+    },
+    {
+        "/test_ll_remove_head", /* name */
+        test_ll_remove_head, /* test */
+        NULL, /* setup */
+        NULL, /* tear_down */
+        MUNIT_TEST_OPTION_NONE, /* options */
+        NULL /* parameters */
+    },
    /* Mark the end of the array with an entry where the test
     * function is NULL */
     { NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }    };
 
     static MunitSuite suite = {
-        "/ll", /* name */
+        "/linked_list", /* name */
         ll_tests, /* tests */
         NULL, /* suites */
         1, /* iterations */

@@ -24,3 +24,5 @@ ll_node_t *ll_copy(ll_node_t *head);
 ll_node_t *ll_merge(ll_node_t *h1, ll_node_t *h2);
 int ll_search_node(ll_node_t *head, object_t *o);
 ll_node_t *ll_reverse(ll_node_t *head);
+ll_node_t *ll_remove_tail(ll_node_t **head);
+ll_node_t *ll_remove_head(ll_node_t **head);
