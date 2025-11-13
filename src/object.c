@@ -110,8 +110,9 @@ void free_object(object_t *o) {
             free(o);
             break;
         default:
-            printf("\n\tError: Unknown object kind at 'free_object'\n");
-            exit(-1);
+            free(o);
+            // printf("\n\tError: Unknown object kind at 'free_object'\n");
+            // exit(-1);
     }
 }
 

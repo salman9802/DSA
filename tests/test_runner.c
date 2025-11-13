@@ -9,6 +9,7 @@
 void test_stack_basic();
 MunitSuite *test_object_suite();
 MunitSuite *test_ll_suite();
+MunitSuite *test_da_suite();
 
 
 int main(int argc, char** argv) {
@@ -19,6 +20,7 @@ int main(int argc, char** argv) {
     static MunitSuite sub_suites[4];
     sub_suites[0] = *test_object_suite();
     sub_suites[1] = *test_ll_suite();
+    sub_suites[2] = *test_da_suite();
 
     // static MunitSuite all_suites[] = {
     //     sub_suites,
