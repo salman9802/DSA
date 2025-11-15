@@ -11,6 +11,7 @@ MunitSuite *test_object_suite();
 MunitSuite *test_ll_suite();
 MunitSuite *test_da_suite();
 MunitSuite *test_st_suite();
+MunitSuite *test_dll_suite();
 
 
 int main(int argc, char** argv) {
@@ -18,11 +19,12 @@ int main(int argc, char** argv) {
     // test_stack_basic();
     //  MunitTest *object_tests = test_object_main();
 
-    static MunitSuite sub_suites[5];
+    static MunitSuite sub_suites[6];
     sub_suites[0] = *test_object_suite();
     sub_suites[1] = *test_ll_suite();
     sub_suites[2] = *test_da_suite();
     sub_suites[3] = *test_st_suite();
+    sub_suites[4] = *test_dll_suite();
 
     // static MunitSuite all_suites[] = {
     //     sub_suites,
