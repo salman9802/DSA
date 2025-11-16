@@ -93,8 +93,8 @@ int dll_search_node(dll_node_t *head, object_t *o) {
     return -1;
 }
 
-int dll_length(dll_node_t *head) {
-    int l = 0;
+size_t dll_length(dll_node_t *head) {
+    size_t l = 0;
     while(head != NULL) {
         l++;
         head = head->next;
@@ -125,7 +125,9 @@ dll_node_t *dll_remove_at_head(dll_node_t **head) {
     if(*head == NULL) return NULL;
     dll_node_t *first = *head;
     if((*head)->next != NULL) *head = (*head)->next;
-    (*head)->prev = NULL;
+    else *head = NULL;
+    // (*head)->prev = NULL;
+    first->prev = NULL;
     first->next = NULL;
     return first;
 }
