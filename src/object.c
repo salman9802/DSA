@@ -9,6 +9,7 @@ void print_object(object_t *o) {
         case INT: printf("%d", o->value.v_int); break;
         case FLOAT: printf("%f", o->value.v_float); break;
         case STR: printf("%s", o->value.v_str); break;
+        case PTR: printf("%p", o->value.v_ptr); break;
         default: printf("%p", o); break;
     }
 }
@@ -47,6 +48,15 @@ object_t *new_str_object(char *value) {
     return o;
 }
 
+object_t *new_ptr_object(void *value) {
+    object_t *o = (object_t *) malloc(sizeof(object_t));
+    if(o == NULL) return NULL;
+
+    o->kind = PTR;
+    o->value.v_ptr = value;
+    return o;
+}
+
 int object_compare(object_t *o1, object_t *o2) {
     switch(o1->kind) {
         case INT:
@@ -69,6 +79,9 @@ int object_compare(object_t *o1, object_t *o2) {
                 printf("\nInvalid operation at 'object_compare'\n");
                 exit(-1);
             }
+        case PTR:
+            printf("\n\tError: Cannot compare object of kind 'PTR' at 'compare_object'.\n");
+            exit(-1);
         default: return 0;
     }
 }
@@ -109,6 +122,9 @@ void free_object(object_t *o) {
             free(o->value.v_str);
             free(o);
             break;
+        case PTR:
+            printf("\n\tError: Cannot free object of kind 'PTR' at 'free_object'. Manually free the object value and object.\n");
+            exit(-1);
         default:
             free(o);
             // printf("\n\tError: Unknown object kind at 'free_object'\n");
@@ -138,8 +154,25 @@ object_t *object_copy(object_t *o) {
             new_object->kind = STR;
             strcpy(new_object->value.v_str, o->value.v_str);
             return new_object;
+        case PTR:
+            printf("\n\tError: Cannot copy object of kind 'PTR' at 'object_copy'.\n");
+            exit(-1);
         default:
             printf("\nInvalid operation at 'object_copy'\n");
+            exit(-1);
+    }
+}
+
+void *object_value(object_t *o) {
+    if(o == NULL) return NULL;
+
+    switch(o->kind) {
+        case INT: return &(o->value.v_int);
+        case FLOAT: return &(o->value.v_float);
+        case STR: return o->value.v_str;
+        case PTR: return o->value.v_ptr;
+        default:
+            printf("\n\tError: Unknown object kind at 'object_value'.\n");
             exit(-1);
     }
 }

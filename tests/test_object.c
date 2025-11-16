@@ -137,6 +137,33 @@ MunitResult test_object_compare() {
     return MUNIT_OK;
 }
 
+MunitResult test_ptr_object() {
+    object_t *o1 = new_int_object(5);
+    object_t *o1_ptr = new_ptr_object(o1);
+
+    munit_assert_ptr(o1, ==, o1_ptr->value.v_ptr);
+
+    return MUNIT_OK;
+}
+
+MunitResult test_object_value() {
+    int i1 = 5;
+    object_t *o_int = new_int_object(i1);
+
+    munit_assert_int(*((int *)object_value(o_int)), ==, i1);
+    
+    float f1 = 5.0;
+    object_t *o_float = new_float_object(f1);
+
+    munit_assert_float(*((float *)object_value(o_float)), ==, f1);
+    
+    char *s1 = "Hello World!";
+    object_t *o_str = new_str_object(s1);
+
+    munit_assert_string_equal((char*)object_value(o_str), s1);
+
+    return MUNIT_OK;
+}
 
 MunitSuite *test_object_suite() {
     static MunitTest object_tests[] = {
@@ -167,6 +194,22 @@ MunitSuite *test_object_suite() {
     {
         "/test_object_compare",
         test_object_compare,
+        NULL,
+        NULL,
+        MUNIT_TEST_OPTION_NONE,
+        NULL
+    },
+    {
+        "/test_ptr_object",
+        test_ptr_object,
+        NULL,
+        NULL,
+        MUNIT_TEST_OPTION_NONE,
+        NULL
+    },
+    {
+        "/test_object_value",
+        test_object_value,
         NULL,
         NULL,
         MUNIT_TEST_OPTION_NONE,
