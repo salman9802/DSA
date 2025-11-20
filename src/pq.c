@@ -157,8 +157,9 @@ void pq_free_items(pq_t *pq) {
     pq->front = pq->rear = NULL;
 }
 
-void pq_free(pq_t *pq) {
-    if(pq == NULL) return;
-    pq_free_items(pq);
-    free(pq);
+void pq_free(pq_t **pq) {
+    if(pq == NULL || *pq == NULL) return;
+    pq_free_items(*pq);
+    free(*pq);
+    *pq = NULL;
 }

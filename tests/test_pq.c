@@ -160,6 +160,10 @@ MunitResult test_pq_enqueue_and_dequeue_by_priority() {
     munit_assert_ptr(pq_dequeue_by_priority(pq, PQ_HIGH), ==, NULL);
     munit_assert_ptr(pq_dequeue_by_priority(pq, PQ_LOW), ==, NULL);
 
+    pq_free(&pq);
+
+    munit_assert_ptr(pq, ==, NULL);
+
     return MUNIT_OK;
 }
 

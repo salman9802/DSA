@@ -32,5 +32,5 @@ pq_item_t *pq_dequeue(pq_t *pq);
 
 
 void pq_free_item(pq_item_t *item);
-void pq_free(pq_t *pq);
-void pq_free(pq_t *pq);
+void pq_free_items(pq_t *pq);
+void pq_free(pq_t **pq);
