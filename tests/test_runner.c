@@ -14,6 +14,7 @@ MunitSuite *test_st_suite();
 MunitSuite *test_dll_suite();
 MunitSuite *test_q_suite();
 MunitSuite *test_pq_suite();
+MunitSuite *test_scht_suite();
 
 
 int main(int argc, char** argv) {
@@ -29,6 +30,7 @@ int main(int argc, char** argv) {
     sub_suites[4] = *test_dll_suite();
     sub_suites[5] = *test_q_suite();
     sub_suites[6] = *test_pq_suite();
+    sub_suites[6] = *test_scht_suite();
 
     // static MunitSuite all_suites[] = {
     //     sub_suites,
