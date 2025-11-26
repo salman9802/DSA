@@ -45,6 +45,81 @@ MunitResult test_scht_fnv_a1() {
     return MUNIT_OK;
 }
 
+MunitResult test_new_scht() {
+    int n = 10;
+    scht_t *scht = new_scht(n);
+
+    munit_assert_size(scht->capacity, ==, (size_t) 1 << n);
+    munit_assert_size(scht->element_count, ==, 0);
+    munit_assert_size(scht->max_load_factor, ==, 0.75);
+
+    for(size_t i = 0; i < scht->capacity; i++)
+        munit_assert_ptr(scht->buckets[i], ==, NULL);
+    
+    return MUNIT_OK;
+}
+
+MunitResult test_scht_set() {
+    int n = 10;
+    scht_t *scht = new_scht(n);
+
+    scht_set(scht, "Hello World!", new_int_object(1));
+    
+    return MUNIT_OK;
+}
+
+MunitResult test_scht_get() {
+    int i1 = 1, i2 = 2, i3 = 3;
+    object_t *o1, *o2, *o3;
+    o1 = new_int_object(i1);
+    o2 = new_int_object(i2);
+    o3 = new_int_object(i3);
+
+    int n = 10;
+    scht_t *scht = new_scht(n);
+    
+    scht_set(scht, "o1", o1);
+    scht_set(scht, "o2", o2);
+    scht_set(scht, "o3", o3);
+
+    munit_assert_ptr(scht_get(scht, "o1"), ==, o1);
+    munit_assert_ptr(scht_get(scht, "o2"), ==, o2);
+    munit_assert_ptr(scht_get(scht, "o3"), ==, o3);
+    
+    munit_assert_size(scht->element_count, ==, 3);
+    
+    return MUNIT_OK;
+}
+
+MunitResult test_scht_remove() {
+    int i1 = 1, i2 = 2, i3 = 3;
+    object_t *o1, *o2, *o3;
+    o1 = new_int_object(i1);
+    o2 = new_int_object(i2);
+    o3 = new_int_object(i3);
+
+    int n = 10;
+    scht_t *scht = new_scht(n);
+    
+    scht_set(scht, "o1", o1);
+    scht_set(scht, "o2", o2);
+    scht_set(scht, "o3", o3);
+
+    munit_assert_ptr(scht_remove(scht, "o1"), ==, o1);
+    munit_assert_ptr(scht_remove(scht, "o1"), ==, NULL);
+    munit_assert_ptr(scht_remove(scht, "o2"), ==, o2);
+    munit_assert_ptr(scht_remove(scht, "o2"), ==, NULL);
+    munit_assert_ptr(scht_remove(scht, "o3"), ==, o3);
+    munit_assert_ptr(scht_remove(scht, "o3"), ==, NULL);
+    munit_assert_ptr(scht_remove(scht, "o2"), ==, NULL);
+    munit_assert_ptr(scht_remove(scht, "o1"), ==, NULL);
+    munit_assert_ptr(scht_remove(scht, "anything-else"), ==, NULL);
+    
+    munit_assert_size(scht->element_count, ==, 0);
+    
+    return MUNIT_OK;
+}
+
 MunitSuite *test_scht_suite() {
     // int foo = 3, bar = 3;
     // munit_assert_int(foo, ==, bar);
@@ -52,6 +127,38 @@ MunitSuite *test_scht_suite() {
     {
         "/test_scht_fnv_a1", /* name */
         test_scht_fnv_a1, /* test */
+        NULL, /* setup */
+        NULL, /* tear_down */
+        MUNIT_TEST_OPTION_NONE, /* options */
+        NULL /* parameters */
+    },
+    {
+        "/test_new_scht", /* name */
+        test_new_scht, /* test */
+        NULL, /* setup */
+        NULL, /* tear_down */
+        MUNIT_TEST_OPTION_NONE, /* options */
+        NULL /* parameters */
+    },
+    {
+        "/test_scht_set", /* name */
+        test_scht_set, /* test */
+        NULL, /* setup */
+        NULL, /* tear_down */
+        MUNIT_TEST_OPTION_NONE, /* options */
+        NULL /* parameters */
+    },
+    {
+        "/test_scht_get", /* name */
+        test_scht_get, /* test */
+        NULL, /* setup */
+        NULL, /* tear_down */
+        MUNIT_TEST_OPTION_NONE, /* options */
+        NULL /* parameters */
+    },
+    {
+        "/test_scht_remove", /* name */
+        test_scht_remove, /* test */
         NULL, /* setup */
         NULL, /* tear_down */
         MUNIT_TEST_OPTION_NONE, /* options */
