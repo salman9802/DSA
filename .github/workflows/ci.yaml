@@ -1,0 +1,24 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  tests:
+    name: "Tests"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install depedencies
+        run: |
+          sudo apt-get update
+          # Add your dependencies here (GCC, Make, etc.)
+          sudo apt-get install -y build-essential
+
+      - name: Run tests
+        run: make test
